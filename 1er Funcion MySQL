@@ -1,0 +1,12 @@
+DELIMITER $
+CREATE FUNCTION Canciones_Artista(idArtistabuscar INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE totalCanciones INT;
+    
+    SELECT COUNT(*) INTO totalCanciones
+    FROM cancion
+    WHERE idARTISTA = idArtistabuscar;
+    
+    RETURN totalCanciones;
+END $
+DELIMITER ;
