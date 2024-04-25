@@ -1,0 +1,25 @@
+//creamos una columna adicional a la tabla factura para calcular su precio con iva
+
+ALTER TABLE factura ADD COLUMN valorFactura INT;
+
+//Ahora el trigger que calcula el valor del producto y la cantidad que hay mas el iva para calcular el valor de la factura
+
+DELIMITER //
+
+CREATE TRIGGER calcular_valor_factura
+BEFORE INSERT ON factura
+FOR EACH ROW
+BEGIN
+    DECLARE total_sin_iva INT;
+    DECLARE total_con_iva INT;
+
+    SELECT SUM(p.valorVenta * NEW.cantidad) INTO total_sin_iva
+    FROM productos p
+    WHERE p.idProducto = NEW.idProducto;
+
+    SET total_con_iva = total_sin_iva * 1.19;
+
+    SET NEW.valorFactura = total_con_iva;
+END//
+
+DELIMITER ;
